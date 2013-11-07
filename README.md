@@ -49,5 +49,5 @@ Remote install using AWS
     end
 ```
   For more options see: https://github.com/mitchellh/vagrant-aws
-* Import the Vagrant box we are using: `vagrant box add huit-amazon-linux-generic https://raw.github.com/huit/huit-vagrant-boxes/master/aws/amazon-linux-generic.box`
+* Import the Vagrant box we are using: `vagrant box add amazon-linux-x64-13.09 https://github.com/huit/huit-vagrant-boxes/blob/master/aws/amazon-linux-2013.09.box?raw=true`
 * Run: `vagrant up --provider=aws`
