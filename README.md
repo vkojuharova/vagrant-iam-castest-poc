@@ -9,22 +9,26 @@ For the local install, we are using a box (image) from [Puppet Labs](http://pupp
 
 Puppet modules are pulled in using r10k on the VM.
 
-Local install using VirtualBox
-------------------------------
-1. Install VirtualBox
-2. Install Vagrant
-3. Checkout this repo
-4. Run: `vagrant up --provider virtualbox`
+Getting started
+---------------
+1. Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+2. Install [Vagrant](http://docs.vagrantup.com/v2/installation/index.html)
+3. Clone this repository to a local directory
 
-Remote install using AWS
-------------------------
-1. Install Vagrant 1.2 or newer
-2. Install the Vagrant AWS plugin:
+Running locally with VirtualBox
+-------------------------------
+1. From within this directory, run: `vagrant up --provider virtualbox`
+
+Running a remote instance on EC2
+--------------------------------
+1. Install the Vagrant AWS plugin:
         vagrant plugin install vagrant-aws
-3. Create an EC2 Security Group called "basic-web" if it does not already exist.  Open up at minimum SSH access.
-* Create a Vagrant configuration file in your home directory to contain your AWS
-  config values: `cd ~/.vagrant.d/ && vim Vagrantfile`
-  It should resemble this:
+2. Import the Vagrant box we are using:
+        vagrant box add amazon-linux-x64-13.09 https://github.com/huit/huit-vagrant-boxes/blob/master/aws/amazon-linux-2013.09.box?raw=true`
+3. If you have not setup an EC2 keypair, do so now.
+4. If you have deleted the default EC2 security group "basic-web", re-create it or customize this option in step 4.
+4. Create a Vagrant configuration file in your home directory to contain your AWS credentials: `~/.vagrant.d/Vagrantfile`
+  It should resemble this, and may be expanded with [additional options](https://github.com/mitchellh/vagrant-aws):
 ```ruby
     Vagrant.configure("2") do |config|
       config.vm.provider :aws do |aws, override|
@@ -36,6 +40,4 @@ Remote install using AWS
       end
     end
 ```
-  For more options see: https://github.com/mitchellh/vagrant-aws
-4. Import the Vagrant box we are using: `vagrant box add amazon-linux-x64-13.09 https://github.com/huit/huit-vagrant-boxes/blob/master/aws/amazon-linux-2013.09.box?raw=true`
 5. Run: `vagrant up --provider=aws`
