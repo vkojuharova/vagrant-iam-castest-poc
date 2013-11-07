@@ -4,13 +4,10 @@ node default {
   class { 'common': }
 
   # Install and configure Apache
-  class { 'apache':
-    default_mods  => true,
-    default_vhost => true,
-  }
-
-  class { 'apache::mod::proxy_http': }
+  class { 'apache': }
 
   # Install and configure Tomcat
-  class { 'tomcat': }
+  class { 'tomcat':
+    version => '7.0.47',
+  }
 }

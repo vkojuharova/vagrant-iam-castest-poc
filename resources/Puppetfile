@@ -12,6 +12,7 @@ forge 'forge.puppetlabs.com'
 mod 'puppetlabs/apache', '0.9.0'
 mod 'puppetlabs/stdlib', '4.1.0'
 mod 'puppetlabs/firewall', '0.4.2'
+mod 'puppetlabs/concat'
 
 mod 'evenup/tomcat', '0.8.1'
 mod 'evenup/java', '0.0.4'
