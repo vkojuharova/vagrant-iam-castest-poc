@@ -1,0 +1,30 @@
+{
+  "license": "Apache",
+  "version": "0.0.4",
+  "types": [
+
+  ],
+  "description": "Installs java",
+  "source": "UNKNOWN",
+  "checksums": {
+    "manifests/devel.pp": "26607514d6c9f6a2efcc3d54fe9c8fad",
+    "Modulefile": "f004837e33c124c6b639d8f52d86a8fb",
+    "CHANGELOG": "9070f1356cb187e88539110fb1ee4063",
+    "spec/classes/java_devel_spec.rb": "102fa5358144b85a14d1e54094908dac",
+    "README.md": "4a3d611bee51c10ee561fb6f63e9a5a4",
+    "LICENSE": "6a34c40bb8fa2134a463a814bae7dbe6",
+    "spec/spec_helper.rb": "3ea886dd135e120afa31e0aab12e85b0",
+    "manifests/init.pp": "7eca860922643c4ab9b4f42314c0dc23",
+    "Gemfile": "88af91f06ec8d06b5be378bd0bcca5a6",
+    "files/java.profile": "31c9dffcd3eb83c6ef9692b2ec34c27f",
+    "spec/classes/java_init_spec.rb": "ca13e38c7664de18ecb23c488a9f9bb2",
+    "Rakefile": "f37e6131fe7de9a49b09d31596f5fbf1"
+  },
+  "summary": "Manages java.",
+  "dependencies": [
+
+  ],
+  "author": "Justin Lambert <jlambert@letsevenup.com>",
+  "project_page": "https://github.com/evenup/evenup-java",
+  "name": "evenup-java"
+}
