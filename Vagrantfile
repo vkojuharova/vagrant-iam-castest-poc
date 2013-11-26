@@ -29,9 +29,9 @@ Vagrant.configure('2') do |config|
 
   # Amazon Linux AMI
   config.vm.provider :aws do |aws, override|
-    aws.access_key_id = "AKIAIMXUGSX2OUOGQXRQ"
-    aws.secret_access_key = "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"
-    aws.keypair_name = "vanyaKey"
+    aws.access_key_id = "XXX"
+    aws.secret_access_key = "XXX"
+    aws.keypair_name = "XXX"
 
     aws.region = "us-east-1"
 
@@ -46,7 +46,7 @@ Vagrant.configure('2') do |config|
 
 # Don;t have the user
 #    override.ssh.username="ec2-user"
-    override.ssh.private_key_path = "C:/Users/vak860/.ssh/vanyaKey.pem"
+    override.ssh.private_key_path = "XXX"
 
     override.vm.box     = 'amazon-linux-x64-13.09'
     override.vm.box_url = 'https://raw.github.com/huit/huit-vagrant-boxes/master/aws/amazon-linux-13.09.box'
