@@ -29,9 +29,9 @@ Vagrant.configure('2') do |config|
 
   # Amazon Linux AMI
   config.vm.provider :aws do |aws, override|
-    aws.access_key_id = "XX"
-    aws.secret_access_key = "XX"
-    aws.keypair_name = "XX"
+    aws.access_key_id = "AKIAIMXUGSX2OUOGQXRQ"
+    aws.secret_access_key = "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"
+    aws.keypair_name = "vanyaKey"
 
     aws.region = "us-east-1"
 
