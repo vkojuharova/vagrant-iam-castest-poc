@@ -10,4 +10,6 @@ node default {
   class { 'tomcat':
     version => '7.0.47',
   }
+
+#   class('castest':)
 }
