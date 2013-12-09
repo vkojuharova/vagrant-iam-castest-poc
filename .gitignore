@@ -1,3 +1,11 @@
-modules
+modules/common
+modules/epel
+modules/firewall
+modules/java
+modules/logrotate
+modules/apache
+modules/concat
+modules/stdlib
+modules/tomcat
 .vagrant
 *.swp

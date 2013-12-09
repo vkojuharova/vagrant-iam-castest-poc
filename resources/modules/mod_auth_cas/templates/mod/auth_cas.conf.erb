@@ -1,0 +1,42 @@
+#
+# mod_auth_cas is an Apache 2.0/2.2 compliant module that supports the
+# CASv1 and CASv2 protocols
+#
+
+LoadModule auth_cas_module modules/mod_auth_cas.so
+
+
+CASCookiePath       /mod_auth_cas/
+CASCertificatePath  /etc/pki/tls/certs/localhost.crt
+
+CASLoginURL         https://stage.pin1.harvard.edu/cas/login
+CASValidateURL      https://stage.pin1.harvard.edu/cas/samlValidate
+
+
+CASValidateServer  Off
+CASValidateDepth   9
+CASDebug           On
+
+CASAllowWildcardCert On
+
+<%#  for Rey  %>
+CASCookieHttpOnly  On
+
+CASVersion         2
+
+CASValidateSAML     On
+
+
+<Location /castest>
+AuthType CAS
+require valid-user
+
+CASAuthNHeader CAS_USER
+</Location>
+
+ProxyPass       /castest ajp://<%= @servername %>:8003/castest
+
+
+
+
+
