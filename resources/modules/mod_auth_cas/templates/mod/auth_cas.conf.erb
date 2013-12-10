@@ -34,6 +34,13 @@ require valid-user
 CASAuthNHeader CAS_USER
 </Location>
 
+ProxyRequests On
+ProxyPreserveHost On
+<Proxy *>
+        Order deny,allow
+        Allow from all
+</Proxy>
+
 ProxyPass       /castest ajp://<%= @servername %>:8009/castest
 
 

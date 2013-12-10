@@ -32,10 +32,7 @@ include  mod_auth_cas::params
          ssl            => true,
          custom_fragment =>  "Include $mod_auth_cas::params::confd_dir/auth_cas.conf"  ,
          sslproxyengine => true ,
-         directories    => [ { path=> "$docroot", 'allow'=> 'from all', options=>['Indexes',  'FollowSymLinks'], order => ['Allow','Deny'] },
-                             { path=> "/castest", 'allow'=> 'from all', options=>['Indexes',  'FollowSymLinks'], order => ['Allow','Deny'] }   ],
-
-         #directories    => [ { path => '/path/to/directory', order => 'Allow, Deny' } ],
+         directories    => [ { path=> "$docroot", 'allow'=> 'from all', options=>['Indexes',  'FollowSymLinks'], order => ['allow','deny'] } ],
      }
 
  # We don't care where the file is located, just what to put in it.
