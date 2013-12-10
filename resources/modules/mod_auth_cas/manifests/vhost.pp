@@ -2,6 +2,8 @@ define mod_auth_cas::vhost (
       $mod_auth_cas                = true,
       $proxy_ajp                   = true,
       $port                        = '443',
+      $directories                  = undef,
+      $docroot                      = undef,
 ) {
 
 include  mod_auth_cas::params
@@ -26,10 +28,14 @@ include  mod_auth_cas::params
          serveradmin     => 'vanja_kojuharova@harvard.edu',
          access_log_file => "castest_access_log.log",
          priority        => '1',
-         docroot => '/var/www/castest',
-         ssl     => true,
+         docroot        => $docroot,
+         ssl            => true,
          custom_fragment =>  "Include $mod_auth_cas::params::confd_dir/auth_cas.conf"  ,
          sslproxyengine => true ,
+         directories    => [ { path=> "$docroot", 'allow'=> 'from all', options=>['Indexes',  'FollowSymLinks'], order => ['Allow','Deny'] },
+                             { path=> "/castest", 'allow'=> 'from all', options=>['Indexes',  'FollowSymLinks'], order => ['Allow','Deny'] }   ],
+
+         #directories    => [ { path => '/path/to/directory', order => 'Allow, Deny' } ],
      }
 
  # We don't care where the file is located, just what to put in it.
