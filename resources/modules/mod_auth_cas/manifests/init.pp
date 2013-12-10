@@ -6,13 +6,14 @@ class mod_auth_cas {
 
 
 
-    mod_auth_cas::vhost{'mod_auth_cas_vhost':
-            mod_auth_cas=>'true',
-            proxy_ajp => 'true',
-            port     => '8017' ,
-            directories =>[
-                { path=> '/', 'allow'=> 'from all', 'order'=> 'allow,deny' },
-            ] ,
-            docroot => '/var/www/castest',
-    }
+#    mod_auth_cas::vhost{'mod_auth_cas_vhost':
+#            mod_auth_cas=>'true',
+#            proxy_ajp => 'true',
+#            port     => '8017' ,
+#            directories =>[
+#                { path=> '/', 'allow'=> 'from all', 'order'=> 'allow,deny' },
+#            ] ,
+#            docroot => '/var/www/castest',
+#            vhost_name => 'ec2-174-129-126-123.compute-1.amazonaws.com''
+#    }
 }
