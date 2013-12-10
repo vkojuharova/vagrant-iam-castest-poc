@@ -21,8 +21,7 @@ include  mod_auth_cas::params
 
     notice ("DEBUG::mod_auth_cas::vhost confd folder is $mod_auth_cas::params::confd_dir")
      apache::vhost{$::fqdn:
-         vhost_name => 'localhost',
-#         ensure  => 'present',
+#         vhost_name => 'localhost',
          port    => $port,
          serveradmin     => 'vanja_kojuharova@harvard.edu',
          access_log_file => "castest_access_log.log",
