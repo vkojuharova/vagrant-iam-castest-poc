@@ -9,6 +9,27 @@ node default {
   #Install and configure mod_auth_cas Apache module
   class { 'mod_auth_cas': }
 
+  $castest_ssl_port     = '8017'
+  $default_http_port    = '80'
+  $default_ssl_port     = '443'
+
+# Firewall updates. Those will need to be restricted more.
+  resources { "firewall":
+    purge => true
+  }
+  Firewall {
+    before  => Class['iam_firewall::post'],
+    require => Class['iam_firewall::pre'],
+  }
+  class { ['iam_firewall::pre', 'iam_firewall::post']: }
+
+# Firewall rules for current project
+  firewall { '011 allow http and https access':
+      ensure => 'present' ,
+      action => 'accept',
+      proto  => 'tcp',
+      dport   => [$default_ssl_port,$default_http_port, $castest_ssl_port],
+  }
   mod_auth_cas::vhost{'mod_auth_cas_vhost':
           mod_auth_cas=>'true',
           proxy_ajp => 'true',
