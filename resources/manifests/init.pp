@@ -14,7 +14,7 @@ node default {
   $default_ssl_port     = '443'
 
 # Firewall updates. Those will need to be restricted more.
-  resources { "firewall":
+  resources { 'firewall':
     purge => true
   }
   Firewall {
@@ -23,21 +23,25 @@ node default {
   }
   class { ['iam_firewall::pre', 'iam_firewall::post']: }
 
-# Firewall rules for current project
+# Firewall rules for current project. Need to secure it more as currently we
+# can access http://10.11.12.13/ and the forwarded one http://127.0.0.1:8080/
+#
   firewall { '011 allow http and https access':
-      ensure => 'present' ,
-      action => 'accept',
-      proto  => 'tcp',
-      dport   => [$default_ssl_port,$default_http_port, $castest_ssl_port],
+      ensure    => 'present' ,
+      action    => 'accept',
+      proto     => 'tcp',
+      dport     => [$default_ssl_port,$default_http_port, $castest_ssl_port],
   }
   mod_auth_cas::vhost{'mod_auth_cas_vhost':
-          mod_auth_cas=>'true',
-          proxy_ajp => 'true',
-          port     => '8017' ,
-          directories =>[
-              { path=> '/', 'allow'=> 'from all', 'order'=> 'allow,deny' },
-          ] ,
-          docroot => '/var/www/castest',
+          mod_auth_cas  => true,
+          proxy_ajp     => true,
+          port          => $castest_ssl_port,
+          directories   => [
+                { path  => '/',
+                'allow' => 'from all',
+                'order' => 'allow,deny' },
+                ] ,
+          docroot       => '/var/www/castest',
 #          servername => 'ec2-174-129-126-123.compute-1.amazonaws.com',
   }
 
@@ -49,10 +53,10 @@ node default {
   #Deploy castest application
   class{'castest':}
 
-  castest::deploy{"castest":
-    deploy_dir =>   "$tomcat::install_dir/tomcat/webapps",
+  castest::deploy{'castest':
+    deploy_dir  =>   "${tomcat::install_dir}/tomcat/webapps",
       #    path  =>  " /vagrant/resources/modules/castest/files/castest.war",
-    path  =>  "puppet:///modules/castest/castest.war",
+    path        =>  'puppet:///modules/castest/castest.war',
   }
 
   #Tomcat changes

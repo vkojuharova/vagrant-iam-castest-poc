@@ -1,3 +1,8 @@
+# = Class: iam_firewall::pre
+#
+# Manages packages and services required by the firewall specific for IAM.
+# Has default rules to be applied first.
+#
 class iam_firewall::pre{
     Firewall{
         require=> undef,
@@ -20,7 +25,7 @@ class iam_firewall::pre{
         action  => 'accept',
       }
       firewall { '003 accept connection on SSH port':
-        ensure    => 'present',
+        ensure  => 'present',
         proto   => 'tcp',
         dport   => '22',
         action  => 'accept',

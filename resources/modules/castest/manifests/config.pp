@@ -1,3 +1,4 @@
+# class castest::config
 # This is not used
 class castest::config(
    $shutdown_port = '8005',

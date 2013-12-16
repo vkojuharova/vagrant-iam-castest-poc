@@ -1,0 +1,31 @@
+class mod_auth_cas::service{
+
+#   include mod_auth_cas
+  notice("DEBUG:: mod_auth_cas::service is called")
+
+
+  mod_auth_cas::vhost{'castest.example.com':
+      port    => '8016',
+  }
+
+}
+
+
+#class ssh::service {
+#service { $ssh::params::ssh_service_name:
+#ensure => running,
+#hasstatus => true,
+#hasresstart => true,
+#enable => true,
+#require => Class["ssh::config"],
+#}
+#}
+
+
+#class myapp {
+#    class { 'apache::proxy':
+#        var1    => 'param1',
+#        var2    => 'param2';
+#    }
+#    include myapp::apache
+#}
