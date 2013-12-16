@@ -7,6 +7,7 @@ define mod_auth_cas::vhost (
 ) {
 
 include  mod_auth_cas::params
+
 #inherits apache::vhost{
 
 #      if $mod_auth_cas {
