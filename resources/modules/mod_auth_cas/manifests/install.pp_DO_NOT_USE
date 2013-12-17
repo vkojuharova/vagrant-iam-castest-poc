@@ -1,8 +1,9 @@
 class mod_auth_cas::install(
  $servername    = $mod_auth_cas::params::servername,
  $confd_dir     = $mod_auth_cas::params::confd_dir,
+ $ajp_port      = '8009',
 ){
-
+     include mod_auth_cas::params
       notice("DEBUG::mod_auth_cas::install servername is $servername")
 
 #Mod Auth CAS cache folder
