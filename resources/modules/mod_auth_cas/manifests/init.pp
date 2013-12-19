@@ -6,13 +6,7 @@ class mod_auth_cas {
 
   include mod_auth_cas::params
 
-#Mod Auth CAS cache folder
-  file { '/mod_auth_cas':
-        ensure  => directory,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0777',
-  }
+
   file {'/var/www':
           ensure  => directory,
           owner   => 'root',
@@ -20,27 +14,20 @@ class mod_auth_cas {
           mode    => '0777',
     }
 
-  file {'/var/www/castest':
-        ensure  => directory,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0777',
-  }
+#  $servername    = $mod_auth_cas::params::servername
 
-  $servername    = $mod_auth_cas::params::servername
+#  notice("DEBUG::mod_auth_cas::init confd_dir is
+#  ${mod_auth_cas::params::confd_dir}")
 
-  notice("DEBUG::mod_auth_cas::init confd_dir is
-  ${mod_auth_cas::params::confd_dir}")
+#  notice("DEBUG::mod_auth_cas::init servername is ${servername}")
 
-  notice("DEBUG::mod_auth_cas::init servername is ${servername}")
-
-  file {  'auth_cas':
-        ensure  => file,
-        path    => "${mod_auth_cas::params::confd_dir}/auth_cas.conf",
-        content => template ('mod_auth_cas/mod/auth_cas.conf.erb'),
-        require => Exec["mkdir ${apache::mod_dir}"],
-        before  => File [$apache::mod_dir],
-  }
+#  file {  'auth_cas':
+#        ensure  => file,
+#        path    => "${mod_auth_cas::params::confd_dir}/auth_cas.conf",
+#        content => template ('mod_auth_cas/mod/auth_cas.conf.erb'),
+#        require => Exec["mkdir ${apache::mod_dir}"],
+#        before  => File [$apache::mod_dir],
+#  }
 
   file {'mod_auth_cas.so':
         ensure  => file,

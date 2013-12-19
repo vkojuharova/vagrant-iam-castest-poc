@@ -25,6 +25,8 @@ node default {
 
 # Firewall rules for current project. Need to secure it more as currently we
 # can access http://10.11.12.13/ and the forwarded one http://127.0.0.1:8080/
+# https://10.11.12.13:8017/castest - accessible
+# https://127.0.0.1:8017/castest - this is not accessible
 #
   firewall { '011 allow http and https access':
       ensure    => 'present' ,
@@ -33,16 +35,21 @@ node default {
       dport     => [$default_ssl_port,$default_http_port, $castest_ssl_port],
   }
   mod_auth_cas::vhost{'mod_auth_cas_vhost':
-          mod_auth_cas  => true,
-          proxy_ajp     => true,
-          port          => $castest_ssl_port,
-          directories   => [
-                { path  => '/',
-                'allow' => 'from all',
-                'order' => 'allow,deny' },
-                ] ,
-          docroot       => '/var/www/castest',
-#          servername => 'ec2-174-129-126-123.compute-1.amazonaws.com',
+      mod_auth_cas      => true,
+      proxy_ajp         => true,
+      port              => $castest_ssl_port,
+      directories       => [
+            { path      => '/',
+            'allow'     => 'from all',
+            'order'     => 'allow,deny' },
+            ] ,
+      docroot           => '/var/www/castest',
+      servername        => '10.11.12.13',
+      ajp_port          => '8009',
+      cas_login_url     =>
+      'https://webdev1ox.iam.huit.harvard.edu:8016/cas/login',
+      cas_validate_url  =>
+      'https://webdev1ox.iam.huit.harvard.edu:8016/cas/samlValidate',
   }
 
   # Install and configure Tomcat

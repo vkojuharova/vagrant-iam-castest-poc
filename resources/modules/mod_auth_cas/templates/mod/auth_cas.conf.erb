@@ -7,10 +7,10 @@ LoadModule auth_cas_module modules/mod_auth_cas.so
 
 
 CASCookiePath       /mod_auth_cas/
-CASCertificatePath  /etc/pki/tls/certs/localhost.crt
+CASCertificatePath  <%= @default_ssl_cert %>
 
-CASLoginURL         https://stage.pin1.harvard.edu/cas/login
-CASValidateURL      https://stage.pin1.harvard.edu/cas/samlValidate
+CASLoginURL         <%= @cas_login_url %>
+CASValidateURL      <%= @cas_validate_url %>
 
 
 CASValidateServer  Off
@@ -41,7 +41,7 @@ ProxyPreserveHost On
         Allow from all
 </Proxy>
 
-ProxyPass       /castest ajp://<%= @servername %>:8009/castest
+ProxyPass       /castest ajp://<%= @servername %>:<%= @ajp_port %>/castest
 
 
 

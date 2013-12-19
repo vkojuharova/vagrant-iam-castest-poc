@@ -5,8 +5,22 @@ if ENV['VAGRANT_DEFAULT_PROVIDER'] == "aws" then
   Vagrant.require_plugin 'aws'
 end
 
+#Vagrant.configure("1") do |config|
+# Enabling a bridged Network
+#  config.vm.network :bridged
+# end
+
+
 Vagrant.configure('2') do |config|
   config.vm.box = 'puppetlabs-centos-64-x64'
+# Enabling a bridged Network with this version.
+# It is likely that public networks will be replaced by :bridged in a future release,
+# since that is in general what should be done with public networks, and providers that
+# don't support bridging generally don't have any other features that map to public networks either.
+#  config.vm.network "public_network"
+
+# Cisco AnyConnect Secure Mobility Client Virtual Miniport Adapter for Windows x64
+
 
 # Comment the following as it starts throwing an exception puppet provisioner: 
 # The manifests path specified for Puppet does not exist: C:/...
@@ -27,34 +41,17 @@ Vagrant.configure('2') do |config|
     override.vm.box_url = 'http://puppet-vagrant-boxes.puppetlabs.com/debian-607-x64-vf503.box'
   end
 
-  # Amazon Linux AMI
-  config.vm.provider :aws do |aws, override|
-    aws.access_key_id = "XXX"
-    aws.secret_access_key = "XXX"
-    aws.keypair_name = "XXX"
-
-    aws.region = "us-east-1"
-
-#    # Simple region config
-#    aws.region_config "us-east-1", :ami => "ami-35792c5c"
-
-    aws.security_groups = ["basic-web"]
-    aws.instance_type = "t1.micro"
-    aws.tags = {
-    'Name' => "VanjaVagrantServer"
-    }
-
-# Don;t have the user
-#    override.ssh.username="ec2-user"
-    override.ssh.private_key_path = "XXX"
-
-    override.vm.box     = 'amazon-linux-x64-13.09'
-    override.vm.box_url = 'https://raw.github.com/huit/huit-vagrant-boxes/master/aws/amazon-linux-13.09.box'
-  end
+  config.vm.hostname = 'vagrant.local.harvard.edu'
+  # Private networks allow you to access your guest machine by some address that is not publicly accessible from the global internet.
+  # In general, this means your machine gets an address in the private address space.
+  # Assign a static IP to the Vagrant machine
+  config.vm.network :private_network,
+        ip: '10.11.12.13'
 
   # Forward standard ports (local only, does not run under AWS)
-  config.vm.network :forwarded_port, guest: 80,  host: 8080, auto_correct: true
-  config.vm.network :forwarded_port, guest: 443, host: 8443, auto_correct: true
+  config.vm.network :forwarded_port, guest: 80,  host: 8080, auto_correct: true, id: 'http'
+  config.vm.network :forwarded_port, guest: 443, host: 8443, auto_correct: true, id: 'https'
+  config.vm.network :forwarded_port, guest: 8017, host: 8017, auto_correct: true, id: 'https'
 
   # Install r10k using the shell provisioner and download the Puppet modules
   config.vm.provision :shell, :path => 'resources/bootstrap.sh'
@@ -64,6 +61,7 @@ Vagrant.configure('2') do |config|
     puppet.manifests_path = "resources/manifests"
     puppet.manifest_file  = "init.pp"
 #    puppet.options        = "--verbose --hiera_config /vagrant/resources/hiera/hiera.yaml --modulepath /vagrant/resources/modules"
-    puppet.options        = "--verbose --debug --hiera_config /vagrant/resources/hiera/hiera.yaml --modulepath /vagrant/resources/modules --debug"
+    puppet.options        = "--verbose --debug --hiera_config /vagrant/resources/hiera/hiera.yaml --modulepath /vagrant/resources/modules"
   end
+
 end

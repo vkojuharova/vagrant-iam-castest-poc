@@ -9,6 +9,10 @@
 # - The $directories to configure the Directories directive for the Virtual Host
 # - The $docroot to configure the Document Root
 # - The $servername to configure the servername for the Virtual Host.
+# - The $cas_cache_folder to configure the Cas cache folder for
+# storing cas cookies.
+# - The $ajp_port for Tomcat to configure the ProxyPass for the
+# Virtual Host
 # - The $ip to configure the servername for the Virtual Host
 # Actions:
 # - Install Apache mod_auth_cas module Virtual Host
@@ -35,7 +39,12 @@ define mod_auth_cas::vhost (
       $mod_auth_cas                = true,
       $proxy_ajp                   = true,
       $port                        = '443',
-      $servername                  = $name,
+      $servername                  = $apache::params::servername,
+      $cas_cache_folder            = '/mod_auth_cas',
+      $ajp_port                    = '8009',
+      $cas_login_url               = 'https://stage.pin1.harvard.edu/cas/login',
+      $cas_validate_url            = 'https://stage.pin1.harvard.edu/cas/samlValidate',
+      $default_ssl_cert            = $apache::params::default_ssl_cert,
       $directories                 = undef,
       $docroot                     = undef,
       $ip                          = undef,
@@ -57,8 +66,35 @@ include  mod_auth_cas::params
       }
   }
 
-  notice ('DEBUG::mod_auth_cas::vhost confd folder is ')
-  notice ($mod_auth_cas::params::confd_dir)
+#Mod Auth CAS cache folder
+  file { $cas_cache_folder:
+        ensure  => directory,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0777',
+  }
+
+  notice("DEBUG::mod_auth_cas::vhost confd_dir is
+  ${mod_auth_cas::params::confd_dir}")
+
+  notice("DEBUG::mod_auth_cas::vhost servername is ${servername}")
+
+  file {  'auth_cas':
+        ensure  => file,
+        path    => "${mod_auth_cas::params::confd_dir}/auth_cas.conf",
+        content => template ('mod_auth_cas/mod/auth_cas.conf.erb'),
+        require => Exec["mkdir ${apache::mod_dir}"],
+        before  => File [$apache::mod_dir],
+  }
+
+# Make sure docroot exists
+  file {$docroot:
+        ensure  => directory,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0777',
+  }
+
 
   apache::vhost{$::fqdn:
 #    vhost_name     => 'localhost',
