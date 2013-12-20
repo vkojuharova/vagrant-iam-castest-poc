@@ -1,19 +1,23 @@
 node default {
-  stage { 'pre': before => Stage['main'] }
-  class { 'epel': stage => 'pre' }
-  class { 'common': }
-
-  # Install and configure Apache
-  class { 'apache': }
-
-  #Install and configure mod_auth_cas Apache module
-  class { 'mod_auth_cas': }
 
   $castest_ssl_port     = '8017'
   $default_http_port    = '80'
   $default_ssl_port     = '443'
+  $ajp_port             = '8009'
+  $shutdown_port        = '8005'
+  $http_port            = '8016'
+  $http_enabled         = true
+  $servername           = '192.168.1.13'
+  $tomcat_version       = '7.0.47'
 
-# Firewall updates. Those will need to be restricted more.
+  stage { 'pre': before => Stage['main'] }
+  class { 'epel': stage => 'pre' }
+  class { 'common': }
+
+# ===================================
+# Firewall updates. Those will need
+# to be restricted more.
+# ===================================
   resources { 'firewall':
     purge => true
   }
@@ -29,51 +33,68 @@ node default {
 # https://127.0.0.1:8017/castest - this is not accessible
 #
   firewall { '011 allow http and https access':
-      ensure    => 'present' ,
-      action    => 'accept',
-      proto     => 'tcp',
-      dport     => [$default_ssl_port,$default_http_port, $castest_ssl_port],
+    ensure    => 'present' ,
+    action    => 'accept',
+    proto     => 'tcp',
+    dport     => [$default_ssl_port,$default_http_port, $castest_ssl_port, $http_port],
   }
+
+# ===================================
+# Install and configure Apache
+# ===================================
+  class { 'apache': }
+
+# ===================================
+# Install and configure mod_auth_cas
+# Apache module
+# ===================================
+  class { 'mod_auth_cas': }
+
   mod_auth_cas::vhost{'mod_auth_cas_vhost':
-      mod_auth_cas      => true,
-      proxy_ajp         => true,
-      port              => $castest_ssl_port,
-      directories       => [
-            { path      => '/',
-            'allow'     => 'from all',
-            'order'     => 'allow,deny' },
+    mod_auth_cas      => true,
+    proxy_ajp         => true,
+    port              => $castest_ssl_port,
+    directories       => [
+            { path    => '/',
+            'allow'   => 'from all',
+            'order'   => 'allow,deny' },
             ] ,
-      docroot           => '/var/www/castest',
-      servername        => '10.11.12.13',
-      ajp_port          => '8009',
-      cas_login_url     =>
+    docroot           => '/var/www/castest',
+    servername        => $servername,
+    ajp_port          => $ajp_port,
+    cas_login_url     =>
       'https://webdev1ox.iam.huit.harvard.edu:8016/cas/login',
-      cas_validate_url  =>
+    cas_validate_url  =>
       'https://webdev1ox.iam.huit.harvard.edu:8016/cas/samlValidate',
   }
 
-  # Install and configure Tomcat
-  class { 'tomcat':
-    version => '7.0.47',
+# =====================================
+# Install and configure Tomcat
+# according to IAM Tomcat installations
+# =====================================
+  class { 'tomcat_iam':
+    shutdown_port     => $shutdown_port,
+    ajp_port          => $ajp_port,
+    http_port         => $http_port,
+    auto_deploy       => false,
+    http_enabled      => $http_enabled,
+    host_name         => 'castest',
+    version           => $tomcat_version,
   }
 
-  #Deploy castest application
+# ====================================
+# Deploy castest application
+# ====================================
   class{'castest':}
 
   castest::deploy{'castest':
     deploy_dir  =>   "${tomcat::install_dir}/tomcat/webapps",
-      #    path  =>  " /vagrant/resources/modules/castest/files/castest.war",
     path        =>  'puppet:///modules/castest/castest.war',
   }
 
-  #Tomcat changes
-#  class{'tomcat_iam':}
-
-#  tomcat_iam::install{'tomcat_iam_config':
-#        shutdown_port  => '8020',
-#        ajp_port       => '8009',
-#        http_port      => '8021',
-#        ssl_port       => '8022',
-#  }
+# ====================================
+# Deploy any additional applications
+# using the castest example above
+# ====================================
 
 }

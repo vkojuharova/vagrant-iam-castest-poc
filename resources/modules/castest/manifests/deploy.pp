@@ -12,8 +12,8 @@
 #   Simple deployment definition:
 #   castest::deploy {
 #     'castest':
-#       deploy_dir         => "${tomcat::install_dir}/tomcat/webapps",
-#       path  =>  "puppet:///modules/castest/castest.war",
+#       deploy_dir  => "${tomcat::install_dir}/tomcat/webapps",
+#       path        =>  "puppet:///modules/castest/castest.war",
 #   }
 #
 define castest::deploy(

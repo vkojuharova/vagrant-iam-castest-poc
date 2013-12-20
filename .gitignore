@@ -7,5 +7,7 @@ modules/apache
 modules/concat
 modules/stdlib
 modules/tomcat
+modules/huit
+modules/apache
 .vagrant
 *.swp
