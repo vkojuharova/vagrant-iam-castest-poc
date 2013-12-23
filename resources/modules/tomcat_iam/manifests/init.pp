@@ -12,7 +12,7 @@ class tomcat_iam(
     $host_name          = $tomcat_iam::config::host_name,
     $manage             = true,
     $version            = $tomcat_iam::config::version,
-) {
+) inherits tomcat_iam::config {
 
 # Install Tomcat with custom server.xml header:
   class { 'tomcat':

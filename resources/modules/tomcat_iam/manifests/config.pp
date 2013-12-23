@@ -6,7 +6,7 @@
 class tomcat_iam::config (
     $shutdown_port      = '8005',
     $ajp_port           = '8009',
-    $ajp_redirect_port  = '8443'
+    $ajp_redirect_port  = '8443',
     $http_port          = '8080',
     $http_enabled       = true,
     $ssl_port           = '8443',
