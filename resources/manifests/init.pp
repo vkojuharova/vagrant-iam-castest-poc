@@ -7,7 +7,6 @@ node default {
   $shutdown_port        = '8005'
   $http_port            = '8016'
   $http_enabled         = true
-  $servername           = '192.168.1.13'
   $tomcat_version       = '7.0.47'
 
   stage { 'pre': before => Stage['main'] }
@@ -38,7 +37,7 @@ node default {
     proto     => 'tcp',
     dport     => [$default_ssl_port,$default_http_port, $castest_ssl_port, $http_port],
   }
-
+  notice ("DEBUG::master init:: servername is $servername")
 # ===================================
 # Install and configure Apache
 # ===================================
@@ -78,7 +77,7 @@ node default {
     http_port         => $http_port,
     auto_deploy       => false,
     http_enabled      => $http_enabled,
-    host_name         => 'castest',
+#    host_name         => 'castest',
     version           => $tomcat_version,
   }
 
